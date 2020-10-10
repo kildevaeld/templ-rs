@@ -1,0 +1,13 @@
+[package]
+name = "templ-vm"
+version = "0.1.0"
+authors = ["Rasmus Kildevæld <rasmuskildevaeld@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+templ-ast = { path = "../templ-ast" }
+templ-parser = { path = "../templ-parser" }
+templ-runtime = { path = "../templ-runtime" }
+id-arena = "2"

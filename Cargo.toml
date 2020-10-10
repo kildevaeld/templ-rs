@@ -1,0 +1,13 @@
+[workspace]
+
+members = [
+    "xtask",
+    "templ-parser",
+    "templ-ast",
+    "templ-cli",
+    "templ-runtime",
+    "templ-vm"
+]
+
+[profile.release]
+lto = true

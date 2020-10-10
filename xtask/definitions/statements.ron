@@ -1,0 +1,56 @@
+[
+    ("Module", [
+        ("statements", Repeated(Stmt)),
+    ]),
+    ("Template", [
+        ("name", String),
+        ("params", Repeated(Stmt)),
+        ("body", Stmt),
+        ("extends", Optional(Identifier))
+    ]),
+    ("Block", [
+        ("value", Repeated(Stmt))
+    ]),
+    ("Param", [
+        ("name", String),
+        ("ty", Type)
+    ]),
+    ("Raw", [
+        ("value", String),
+    ]),
+    ("Model", [
+        ("name", Identifier),
+        ("fields", Repeated(Stmt)),
+        ("extends", Optional(Identifier)),
+    ]),
+    ("Expr", [
+        ("value", Expr)
+    ]),
+    ("Loop",[
+        ("key", Identifier),
+        ("value", Optional(Identifier)),
+        ("target", Expr),
+        ("block", Stmt)
+    ]),
+    ("Comment", [
+        ("value", String)
+    ]),
+    ("Tag", [
+        ("name", Identifier),
+        ("argument", Optional(Expr)),
+        ("block", Optional(Stmt)),
+    ]),
+    ("If", [
+        ("condition", Expr),
+        ("consequence", Stmt),
+        ("alternative", Optional(Stmt))
+    ]),
+    ("Elif", [
+        ("condition", Expr),
+        ("consequence", Stmt),
+        ("alternative", Optional(Stmt))
+    ]),
+    ("Else", [
+        ("block", Stmt)
+    ])
+]

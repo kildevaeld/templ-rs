@@ -1,0 +1,51 @@
+use std::convert::TryFrom;
+use std::fmt;
+
+#[repr(u8)]
+#[derive(Debug, Clone, PartialEq, Copy)]
+pub enum OpCode {
+    {% for opcode in opcodes %}
+    {{ opcode }},
+    {% endfor %}
+    Unused,
+}
+
+impl fmt::Display for OpCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            {% for opcode in opcodes %}
+            OpCode::{{ opcode }} => write!(f, "OP_{{ opcode | upper }}"),
+            {% endfor %}
+            OpCode::Unused => write!(f, "OP_UNUSED"),
+        }
+    }
+}
+
+impl TryFrom<u8> for OpCode {
+    type Error = InvalidOpCodeErr;
+
+    fn try_from(i: u8) -> Result<OpCode, Self::Error> {
+        if i <= (OpCode::Unused as u8) {
+            unsafe { Ok(std::mem::transmute::<_, OpCode>(i)) }
+        } else {
+            Err(InvalidOpCodeErr(i))
+        }
+    }
+}
+
+impl From<OpCode> for u8 {
+    fn from(op: OpCode) -> u8 {
+        op as u8
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct InvalidOpCodeErr(pub u8);
+
+impl fmt::Display for InvalidOpCodeErr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "invalid opcode: {}", self.0)
+    }
+}
+
+impl std::error::Error for InvalidOpCodeErr {}

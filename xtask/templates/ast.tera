@@ -1,0 +1,70 @@
+/*! WARNING: AUTO GENERATED  - DO NOT EDIT **/
+
+use super::types::*;
+use std::borrow::Cow;
+#[cfg(feature = "serde")]
+use serde::{Serialize, Deserialize};
+
+{% for enum in enums -%}
+{% if enum.visitor -%}
+pub trait {{enum.name}}Visitor<'a, R> {
+    {% for variant in enum.variants %}
+    fn visit_{{variant.name | lower}}_{{enum.name | lower}}(&mut self, e:&mut {{variant.name}}{{enum.name}}{%if variant.lifetime %}<'a>{% endif %}) -> R;
+    {% endfor %}
+}
+{% endif %}
+{% endfor %}
+
+{% for enum in enums %}
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug, Clone, PartialEq)]
+{% if enum.flatten -%}
+#[cfg_attr(feature = "serde", serde(tag = "type"))]
+{% else -%}
+#[cfg_attr(feature = "serde", serde(tag = "type", content = "value"))]
+{% endif -%}
+pub enum {{enum.name}}{% if enum.lifetime %}<'a>{% endif%} {
+    {% for variant in enum.variants -%}
+    {% if variant.lifetime -%}
+    #[cfg_attr(feature = "serde", serde(borrow))]
+    {% endif -%}
+    {{variant.name}}{% if variant.value %}({{variant.value}}){% endif %},
+    {% endfor %}
+}
+{% if enum.visitor %}
+
+impl{% if enum.lifetime %}<'a>{% endif %} {{enum.name}}{% if enum.lifetime %}<'a>{% endif %} {
+    pub fn accept<R>(&mut self, visitor: &mut dyn {{enum.name}}Visitor<'a, R>) -> R {
+        match self {
+            {% for visitor in enum.visitor -%}
+            {{enum.name}}::{{visitor}}(s) => visitor.visit_{{visitor | lower}}_{{enum.name | lower}}(s),
+            {% endfor %}
+        }
+    }
+}
+{% endif %}
+
+{% endfor %}
+
+{% for struct in structures %}
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug, Clone, PartialEq)]
+pub struct {{struct.name}}{% if struct.lifetime%}<'a>{% endif %} {
+    {% for field in struct.fields -%}
+    {% if field.borrowed -%}
+    #[cfg_attr(feature = "serde", serde(borrow))]
+    {% endif -%}
+    pub {{field.name}}: {{field.value}},
+    {% endfor %}
+}
+
+impl{% if struct.lifetime %}<'a>{% endif %} {{struct.name}}{% if struct.lifetime %}<'a>{% endif %} {
+    pub fn new({% for field in struct.fields -%}{{field.name}}: {{field.value}}, {% endfor %}) -> {{struct.name}}{% if struct.lifetime %}<'a>{% endif %} {
+        {{struct.name}} {
+            {% for field in struct.fields %}{{field.name}},
+            {% endfor %}
+        }
+    }
+}
+
+{% endfor %}

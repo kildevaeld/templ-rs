@@ -1,0 +1,33 @@
+use templ_ast::*;
+
+pub type {{name | capitalize}}Result = ();
+
+#[derive(Debug, Clone)]
+pub struct {{name | capitalize}} {
+
+}
+
+impl {{name | capitalize}} {
+    pub fn new() -> {{name | capitalize}} {
+        {{name | capitalize}} { }
+    }
+
+    pub fn visit<'a>(&mut self, module: &mut ModuleStmt<'a>) -> {{name | capitalize}}Result {
+        self.visit_module_stmt(module)
+    }
+}
+
+
+{% for enum in enums %}
+{% if enum.visitor %}
+impl<'a> {{enum.name}}Visitor<'a, {{name | capitalize}}Result> for {{name | capitalize}} {
+
+    {% for variant in enum.variants -%}
+    fn visit_{{variant.name | lower}}_{{enum.name | lower}}(&mut self, e:&mut {{variant.name}}{{enum.name}}{% if variant.lifetime %}<'a>{% endif %}) -> {{name | capitalize}}Result {
+        unimplemented!("visit_{{variant.name | lower}}_{{enum.name | lower}}({:?})", e);
+    }
+    {% endfor %}
+}
+
+{% endif %}
+{% endfor %}

@@ -1,0 +1,18 @@
+[
+    ("UnaryOperator", [
+        "Plus", "Minus", "Increment", "Decrement", "Not"
+    ]),
+    ("PostfixOperator", [
+        "Increment", "Decrement"
+    ]),
+    ("BinaryOperator", [
+        "Add", "Sub", "Mul", "Div", "Mod", "Eq", "Neq", "Lt", "Lte",
+        "Gt", "Gte", "Is"
+    ]),
+    ("LogicalOperator", [
+        "And", "Or"
+    ]),
+    ("AssignmentOperator", [
+        "Add", "Sub", "Mul", "Div", "Mod", "Assign"
+    ])
+]

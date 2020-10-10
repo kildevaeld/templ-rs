@@ -1,0 +1,15 @@
+[package]
+name = "templ-cli"
+version = "0.1.0"
+authors = ["Rasmus Kildevæld <rasmuskildevaeld@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+templ-parser = { path = "../templ-parser" }
+templ-ast = { path = "../templ-ast", features = ["serde"] }
+templ-vm = { path  = "../templ-vm" }
+templ-runtime = { path = "../templ-runtime" }
+serde = "1"
+serde_json = "1"

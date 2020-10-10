@@ -1,0 +1,55 @@
+[
+    // ("Render", [
+    //     ("value", Expr)
+    // ]),
+   
+    // ("Tenary", [
+    //     ("test", Expr),
+    //     ("left", Expr),
+    //     ("right", Expr)
+    // ]),
+    ("Lookup", [
+        ("value", Identifier)
+    ]),
+    ("Literal", [
+        ("value", Literal)
+    ]),
+    ("Call", [
+        ("member", Expr),
+        ("arguments", Repeated(Expr)),
+    ]),
+    ("Member", [
+        ("object", Expr),
+        ("property", Expr),
+    ]),
+     ("Index", [
+        ("object", Expr),
+        ("index", Expr),
+    ]),
+    ("Filter", [
+        ("object", Expr),
+        ("filter", Expr),
+    ]),
+    // Operators
+    ("Group", [
+        ("expr", Expr)
+    ]),
+    ("Binary", [
+        ("left", Expr),
+        ("right", Expr),
+        ("op", BinaryOperator),
+    ]),
+    ("Logical", [
+        ("left", Expr),
+        ("right", Expr),
+        ("op", LogicalOperator),
+    ]),
+    ("Postfix", [
+        ("value", Expr),
+        ("op", PostfixOperator)
+    ]),
+    ("Unary", [
+        ("value", Expr),
+        ("op", UnaryOperator)
+    ])
+]
