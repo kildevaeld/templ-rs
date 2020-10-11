@@ -9,17 +9,3 @@ pub fn parse<'a>(content: &'a str) -> Result<templ_ast::ModuleStmt<'a>, error::E
 
   Ok(ast)
 }
-
-#[cfg(test)]
-mod tests {
-
-  use super::parse;
-  #[test]
-  fn test() {
-    let data = include_str!("../simple.tpl");
-
-    let out = parse(data).unwrap();
-
-    println!("{:?}", out);
-  }
-}

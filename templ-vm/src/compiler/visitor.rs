@@ -249,6 +249,17 @@ impl<'a> ExprVisitor<'a, VisitorResult> for Visitor {
                 self.chunk_mut().emit16(len as u16);
                 return Ok(());
             }
+            Literal::Map(v) => {
+                let len = v.len() * 2;
+                for (k, v) in v {
+                    self.chunk_mut()
+                        .emit_constant(Value::String(k.as_ref().to_owned()));
+                    v.accept(self)?;
+                }
+                self.chunk_mut().emit(OpCode::Map);
+                self.chunk_mut().emit16(len as u16);
+                return Ok(());
+            }
             _ => unimplemented!("literal {:?}", e),
         };
         self.chunk_mut().emit_constant(val);

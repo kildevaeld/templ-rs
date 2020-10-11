@@ -48,7 +48,7 @@ impl<'a> ExprVisitor<'a, VisitorResult> for Visitor<'a> {
         unimplemented!("visit_group_expr({:?})", e);
     }
     fn visit_binary_expr(&mut self, e: &mut BinaryExpr<'a>) -> VisitorResult {
-        unimplemented!("visit_binary_expr({:?})", e);
+        Ok(())
     }
     fn visit_logical_expr(&mut self, e: &mut LogicalExpr<'a>) -> VisitorResult {
         unimplemented!("visit_logical_expr({:?})", e);

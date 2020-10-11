@@ -32,5 +32,6 @@
     "Render2",
     "Render3",
     "RenderN",
-    "Slice"
+    "Slice",
+    "Map"
 ]

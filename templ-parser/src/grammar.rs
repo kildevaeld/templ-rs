@@ -1,4 +1,6 @@
 use peg::ParseLiteral;
+use std::borrow::Cow;
+use std::collections::HashMap;
 use templ_ast::*;
 
 pub(crate) fn resolve_member<'a>(l: Expr<'a>, mut o: Vec<Expr<'a>>) -> Expr<'a> {
@@ -183,6 +185,7 @@ peg::parser! {
                 / literal_number()
                 / literal_boolean()
                 / literal_string()
+                / literal_map()
             ) { Expr::Literal(LiteralExpr::new(lit)) }
 
 
@@ -202,6 +205,21 @@ peg::parser! {
                 i
             }
 
+
+        /**  Map Literal */
+        rule literal_map() -> Literal<'input>
+            = "{" __  p:map_prop() ** ( __ "," __) __  "}" {
+                let mut map = HashMap::default();
+                for prop in p.into_iter() {
+                    map.insert(prop.0.into(), prop.1);
+                }
+                Literal::Map(map)
+            }
+
+        rule map_prop() -> (Cow<'input, str>, Expr<'input>)
+            = k:( l:literal_string() { l.as_str().unwrap().clone() }  / i:identifier() { i.value.clone() }) _ ":" _ v:expression() {
+                (k, v)
+            }
          /**  Number Literals  */
          rule literal_number() -> Literal<'input>
             =  n:(double() / int()) { Literal::Number(n) }

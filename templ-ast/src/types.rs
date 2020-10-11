@@ -2,6 +2,7 @@ use super::ast::{Expr, Stmt};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
+use std::collections::HashMap;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Copy, PartialEq, Debug)]
@@ -42,6 +43,16 @@ pub enum Literal<'a> {
     Bool(bool),
     #[cfg_attr(feature = "serde", serde(borrow))]
     Slice(Vec<Expr<'a>>),
+    Map(HashMap<Cow<'a, str>, Expr<'a>>),
+}
+
+impl<'a> Literal<'a> {
+    pub fn as_str(&self) -> Option<&Cow<'a, str>> {
+        match self {
+            Literal::String(s) => Some(s),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]

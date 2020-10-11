@@ -296,6 +296,7 @@ impl Chunk {
             // OpCode::Method => constant_instruction!("OP_METHOD",  self, offset, f),
             // OpCode::CloseUpValue => simple_instruction!(opcode, offset, f),
             OpCode::Slice => initializer!(opcode, self, offset, f),
+            OpCode::Map => initializer!(opcode, self, offset, f),
             OpCode::Call0 | OpCode::Call1 | OpCode::Call2 | OpCode::Call3 => simple_instruction_n!(
                 "OP_CALL",
                 offset,

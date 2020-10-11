@@ -35,6 +35,7 @@ pub enum OpCode {
     Render3,
     RenderN,
     Slice,
+    Map,
     Unused,
 }
 
@@ -72,6 +73,7 @@ impl fmt::Display for OpCode {
             OpCode::Render3 => write!(f, "OP_RENDER3"),
             OpCode::RenderN => write!(f, "OP_RENDERN"),
             OpCode::Slice => write!(f, "OP_SLICE"),
+            OpCode::Map => write!(f, "OP_MAP"),
             OpCode::Unused => write!(f, "OP_UNUSED"),
         }
     }

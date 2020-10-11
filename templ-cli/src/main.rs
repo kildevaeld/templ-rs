@@ -15,16 +15,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for t in templates {
         println!("{}", t);
-        let output = templ_vm::run_vm(
-            &t,
-            vec![
-                Value::String("Hello".into()),
-                Value::String("World".into()),
-                Value::Number(Number::Integer(101.0)),
-            ],
-        );
+        // let output = templ_vm::run_vm(
+        //     &t,
+        //     vec![
+        //         Value::String("Hello".into()),
+        //         Value::String("World".into()),
+        //         Value::Number(Number::Integer(101.0)),
+        //     ],
+        // );
 
-        println!("{}", output);
+        // println!("{}", output);
     }
 
     // let data = fs::read_to_string(&o[0])?;
