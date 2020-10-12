@@ -15,7 +15,7 @@ id-arena = "2"
 
 [dev-dependencies]
 criterion = "0.3"
-
+tera = "1"
 [[bench]]
 name = "render"
 harness = false

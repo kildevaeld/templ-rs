@@ -11,7 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    let templates = templ_vm::compiler::compile(&o[0]).expect("compile");
+    let templates = templ_vm::compiler::compile_path(&o[0]).expect("compile");
 
     for t in templates {
         println!("{}", t);
