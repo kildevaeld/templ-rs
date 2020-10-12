@@ -1,4 +1,4 @@
-use super::{value::*, Error};
+use super::{value::*, Error, Filter, FilterBox};
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Write;
@@ -9,15 +9,6 @@ pub struct Args(Vec<Type>);
 pub trait RenderTarget: fmt::Write {}
 
 impl RenderTarget for String {}
-
-pub trait Filter {
-    fn args(&self) -> &Args;
-
-    fn call(&self, args: &[Value]) -> Result<Value, Error>;
-}
-
-#[derive(Clone)]
-pub struct FilterBox(Arc<Box<dyn Filter>>);
 
 pub trait Block: Renderable {
     fn name(&self) -> &str;
@@ -71,6 +62,15 @@ pub struct RuntimeBuilder {
 }
 
 impl RuntimeBuilder {
+    pub fn filter<F>(mut self, name: impl ToString, filter: F) -> Self
+    where
+        F: Filter + 'static,
+    {
+        self.filters
+            .insert(name.to_string(), FilterBox(Arc::new(Box::new(filter))));
+        self
+    }
+
     pub fn build(self) -> Runtime {
         Runtime(Arc::new(RuntimeInner {
             filters: self.filters,

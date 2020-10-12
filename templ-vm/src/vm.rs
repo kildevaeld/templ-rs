@@ -1,10 +1,10 @@
 use super::compiler::{chunk::Chunk, Constant, OpCode};
-use super::template::Template;
+use super::{Error, Template};
 use id_arena::{Arena, Id};
 use smallvec::SmallVec;
 use std::convert::TryFrom;
 use std::fmt::Write;
-use templ_runtime::{Renderable, Value};
+use templ_runtime::{RenderTarget, Renderable, Value};
 
 macro_rules! op_cmp {
     ($state: expr, $method: ident, $templates: expr) => {{
@@ -63,7 +63,11 @@ impl VMState {
     }
 }
 
-pub fn run_vm<'a>(template: &'a Template, args: Vec<Value>) -> String {
+pub fn run_vm<'a>(
+    template: &'a Template,
+    output: &'a mut dyn RenderTarget,
+    args: Vec<Value>,
+) -> Result<(), Error> {
     let mut arena: Arena<VMValue<'a>> = Arena::default();
     let mut stack = args
         .into_iter()
@@ -72,12 +76,12 @@ pub fn run_vm<'a>(template: &'a Template, args: Vec<Value>) -> String {
         .collect::<SmallVec<[Id<VMValue>; 24]>>();
     let mut state = VMState { ip: 0 };
 
-    let mut output = String::new();
+    // let mut output = String::new();
 
     loop {
         let op = match state.next(template) {
             Some(op) => op,
-            None => return output,
+            None => return Ok(()),
         };
 
         match op {
@@ -91,7 +95,7 @@ pub fn run_vm<'a>(template: &'a Template, args: Vec<Value>) -> String {
                 if count == 0 {
                     let value = stack.pop().expect("pop");
                     let value = &arena[value];
-                    value.render(&mut output, &[]).unwrap();
+                    value.render(output, &[]).unwrap();
                 } else {
                     let idx = stack.len() - 1 - count as usize;
                     panic!("not !! {} {}", count, op);

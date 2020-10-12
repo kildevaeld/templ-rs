@@ -8,14 +8,17 @@ static TERA_TEMPLATE: &'static str = include_str!("./tera.tpl");
 
 fn template(_n: u64) {
     let templates = templ_vm::compiler::compile(TEMPLATE, None).unwrap();
-    templ_vm::run_vm(
-        &templates[0],
-        vec![
-            Value::String("Hello".into()),
-            Value::String("World".into()),
-            Value::Number(Number::Integer(101.0)),
-        ],
-    );
+
+    templates[0]
+        .render(
+            &mut String::default(),
+            vec![
+                Value::String("Hello".into()),
+                Value::String("World".into()),
+                Value::Number(Number::Integer(101.0)),
+            ],
+        )
+        .unwrap();
 }
 
 fn tera_template(_n: u64) {

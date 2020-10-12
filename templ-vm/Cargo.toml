@@ -12,6 +12,7 @@ templ-parser = { path = "../templ-parser" }
 templ-runtime = { path = "../templ-runtime" }
 id-arena = "2"
 smallvec = "1"
+thiserror = "1"
 
 [dev-dependencies]
 criterion = "0.3"
