@@ -37,7 +37,7 @@ peg::parser! {
             }
 
         rule template_stmt() -> Stmt<'input>
-            = h:open_close(<template_header()>) line_terminator_sequence()  c:block_stmt() open_close(<end_token()>) {
+            = h:open_close(<template_header()>) line_terminator_sequence() c:block_stmt() open_close(<end_token()>) {
                 Stmt::Template(TemplateStmt::new(h.0.into(), h.1, Box::new(c), h.2))
             }
 

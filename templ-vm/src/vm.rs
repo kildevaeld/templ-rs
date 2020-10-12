@@ -1,6 +1,7 @@
 use super::compiler::{chunk::Chunk, Constant, OpCode};
 use super::template::Template;
 use id_arena::{Arena, Id};
+use smallvec::SmallVec;
 use std::convert::TryFrom;
 use std::fmt::Write;
 use templ_runtime::{Renderable, Value};
@@ -66,9 +67,9 @@ pub fn run_vm<'a>(template: &'a Template, args: Vec<Value>) -> String {
     let mut arena: Arena<VMValue<'a>> = Arena::default();
     let mut stack = args
         .into_iter()
-        //.take(template.params.len())
+        .take(template.params.len())
         .map(|m| arena.alloc(VMValue::Value(m)))
-        .collect::<Vec<_>>();
+        .collect::<SmallVec<[Id<VMValue>; 24]>>();
     let mut state = VMState { ip: 0 };
 
     let mut output = String::new();
@@ -118,7 +119,6 @@ pub fn run_vm<'a>(template: &'a Template, args: Vec<Value>) -> String {
             OpCode::JumpIfFalse => {
                 let offset = state.read_short(&template);
                 let v = &arena[*stack.last().unwrap()];
-                //.expect(&format!("could not get value at index {}", offset));
                 if !v.as_boolean().expect("boolean") {
                     state.ip += offset as usize;
                 }

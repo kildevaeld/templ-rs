@@ -6,6 +6,6 @@ You are old
 {% elif age == 100 %}
 You are 100 years old
 {% else %}
-You are {{age}} 
+You are {{age}}
 {% endif %}
 {% end %}

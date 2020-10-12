@@ -25,15 +25,6 @@ fn tera_template(_n: u64) {
     ctx.insert("age", &101);
 
     tera::Tera::one_off(TERA_TEMPLATE, &ctx, false).unwrap();
-    // let templates = templ_vm::compiler::compile(TEMPLATE, None).unwrap();
-    // templ_vm::run_vm(
-    //     &templates[0],
-    //     vec![
-    //         Value::String("Hello".into()),
-    //         Value::String("World".into()),
-    //         Value::Number(Number::Integer(101.0)),
-    //     ],
-    // );
 }
 
 fn criterion_benchmark(c: &mut Criterion) {
