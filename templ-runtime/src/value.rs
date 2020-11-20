@@ -1,4 +1,4 @@
-use super::{BlockBox, Error, RenderTarget, Renderable};
+use super::{BlockBox, Error, FilterBox, RenderTarget, Renderable};
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt;
@@ -18,6 +18,7 @@ pub enum Type {
     Slice(Box<Type>),
     Struct(Vec<(String, Type)>),
     Block,
+    Filter,
 }
 
 #[derive(Clone, PartialEq, Debug, Copy)]
@@ -34,6 +35,23 @@ pub enum Value {
     Slice(Slice),
     Map(Map),
     Block(BlockBox),
+    Filter(FilterBox),
+}
+
+impl Value {
+    pub fn as_str(&self) -> Result<&str, Error> {
+        match self {
+            Value::String(s) => Ok(s),
+            _ => panic!("not string"),
+        }
+    }
+
+    pub fn call(&self, args: &[&Value]) -> Result<Value, Error> {
+        match self {
+            Value::Filter(filter) => filter.call(args),
+            _ => panic!("not a callable"),
+        }
+    }
 }
 
 impl Value {
@@ -79,6 +97,7 @@ impl Value {
             Value::Slice(s) => !s.data.is_empty(),
             Value::Map(m) => !m.inner.is_empty(),
             Value::Block(_) => true,
+            Value::Filter(_) => true,
         };
 
         Some(s)
@@ -94,6 +113,7 @@ impl ToType for Value {
             Value::Slice(s) => s.to_type(),
             Value::Map(m) => m.to_type(),
             Value::Block(_) => Type::Block,
+            Value::Filter(_) => Type::Filter,
         }
     }
 }
@@ -107,6 +127,7 @@ impl fmt::Display for Value {
             Value::Slice(s) => write!(f, "Slice"),
             Value::String(s) => write!(f, "{}", s),
             Value::Block(b) => write!(f, "Block({})", b.name()),
+            Value::Filter(fil) => write!(f, "Filter({})", fil.name()),
         }
     }
 }
@@ -116,6 +137,10 @@ impl Renderable for Value {
         match self {
             Value::Block(b) => {
                 b.render(dest, args)?;
+            }
+            Value::Filter(f) => {
+                let out = f.call(&args.iter().collect::<Vec<_>>())?;
+                write!(dest, "{}", out)?;
             }
             _ => {
                 write!(dest, "{}", self)?;
@@ -189,5 +214,17 @@ impl ToType for Map {
             .collect();
 
         Type::Struct(types)
+    }
+}
+
+impl From<String> for Value {
+    fn from(v: String) -> Self {
+        Self::String(v)
+    }
+}
+
+impl<'a> From<&'a str> for Value {
+    fn from(v: &'a str) -> Self {
+        Self::String(v.to_string())
     }
 }

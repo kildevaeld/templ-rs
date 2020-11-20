@@ -6,7 +6,8 @@ members = [
     "templ-ast",
     "templ-cli",
     "templ-runtime",
-    "templ-vm"
+    "templ-vm",
+    "templ"
 ]
 
 [profile.release]

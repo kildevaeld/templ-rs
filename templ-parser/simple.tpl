@@ -16,7 +16,7 @@ type BlogPageModel {
 {% end %}
 
 {% template BlogPage(ctx BlogPageModel) %}
-Hello {{ ctx.name | capitalize() | uppercase }}, age: {{ ctx.age + 2 }}
+Hello {{ ctx.name | uppercase() | uppercase }}, age: {{ ctx.age + 2 }}
 {# Comment 
    Here
 #}

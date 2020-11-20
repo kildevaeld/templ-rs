@@ -6,6 +6,12 @@ use std::sync::Arc;
 
 pub struct Args(Vec<Type>);
 
+impl Args {
+    pub fn new(args: Vec<Type>) -> Args {
+        Args(args)
+    }
+}
+
 pub trait RenderTarget: fmt::Write {}
 
 impl RenderTarget for String {}
@@ -62,12 +68,14 @@ pub struct RuntimeBuilder {
 }
 
 impl RuntimeBuilder {
-    pub fn filter<F>(mut self, name: impl ToString, filter: F) -> Self
+    pub fn filter<F>(mut self, filter: F) -> Self
     where
         F: Filter + 'static,
     {
-        self.filters
-            .insert(name.to_string(), FilterBox(Arc::new(Box::new(filter))));
+        self.filters.insert(
+            filter.name().to_owned(),
+            FilterBox(Arc::new(Box::new(filter))),
+        );
         self
     }
 

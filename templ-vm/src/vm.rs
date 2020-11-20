@@ -101,6 +101,30 @@ pub fn run_vm<'a>(
                     panic!("not !! {} {}", count, op);
                 }
             }
+            OpCode::Call0 | OpCode::Call1 | OpCode::Call2 | OpCode::Call3 => {
+                let count = (op as u8) - (OpCode::Call0 as u8);
+                if count == 0 {
+                    let value = stack.pop().expect("pop");
+                    let value = &arena[value];
+                    let ret = value.call(&[]).unwrap();
+                    let id = arena.alloc(VMValue::Value(ret));
+                    stack.push(id);
+                } else {
+                    let idx = stack.len() - 1 - count as usize;
+                    let cb = &arena[*stack.get(idx).unwrap()];
+
+                    let args = stack[idx + 1..]
+                        .iter()
+                        .map(|m| &arena[*m])
+                        .map(|m| &**m)
+                        .collect::<Vec<_>>();
+
+                    let ret = cb.call(&args).expect("call");
+                    stack.truncate(idx);
+                    let id = arena.alloc(VMValue::Value(ret));
+                    stack.push(id);
+                }
+            }
             OpCode::Constant => {
                 let constant = state.read_constant(template).unwrap();
                 let idx = arena.alloc(VMValue::ValueRef(constant));

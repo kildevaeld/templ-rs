@@ -42,7 +42,8 @@ impl<'a> ExprVisitor<'a, VisitorResult> for Visitor<'a> {
         unimplemented!("visit_index_expr({:?})", e);
     }
     fn visit_filter_expr(&mut self, e: &mut FilterExpr<'a>) -> VisitorResult {
-        unimplemented!("visit_filter_expr({:?})", e);
+        // unimplemented!("visit_filter_expr({:?})", e);
+        Ok(())
     }
     fn visit_group_expr(&mut self, e: &mut GroupExpr<'a>) -> VisitorResult {
         unimplemented!("visit_group_expr({:?})", e);

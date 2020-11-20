@@ -5,7 +5,7 @@ mod value;
 
 pub use self::{
     error::*,
-    filters::{Filter, FilterBox},
+    filters::{Filter, FilterBox, FilterFn},
     runtime::*,
     value::*,
 };

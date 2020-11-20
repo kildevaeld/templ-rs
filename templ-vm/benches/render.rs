@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use templ_runtime::{Number, Runtime, Value};
+use templ_runtime::{Args, FilterFn, Number, Runtime, Type, Value};
 use templ_vm;
 
 static TEMPLATE: &'static str = include_str!("../../examples/simple.tpl");
@@ -7,7 +7,17 @@ static TEMPLATE: &'static str = include_str!("../../examples/simple.tpl");
 static TERA_TEMPLATE: &'static str = include_str!("./tera.tpl");
 
 fn template(_n: u64) {
-    let runtime = Runtime::new().build();
+    let runtime = Runtime::new()
+        .filter(FilterFn::new(
+            "capitalize",
+            Args::new(vec![Type::String]),
+            |args| {
+                //
+                let first = args.first().unwrap();
+                Ok(Value::String(first.as_str()?.to_uppercase()))
+            },
+        ))
+        .build();
     let templates = templ_vm::compiler::compile(&runtime, TEMPLATE, None).unwrap();
 
     templates[0]

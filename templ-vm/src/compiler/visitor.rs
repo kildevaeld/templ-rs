@@ -283,7 +283,28 @@ impl<'a> ExprVisitor<'a, VisitorResult> for Visitor {
         unimplemented!("visit_index_expr({:?})", e);
     }
     fn visit_filter_expr(&mut self, e: &mut FilterExpr<'a>) -> VisitorResult {
-        unimplemented!("visit_filter_expr({:?})", e);
+        match e.filter.as_ref() {
+            Expr::Lookup(l) => {
+                //
+                let filter = match self.runtime.filter(l.value.value.as_ref()) {
+                    Some(filter) => filter.clone(),
+                    None => {
+                        unimplemented!("not found {:?}", l);
+                    }
+                };
+                self.chunk_mut().emit_constant(Value::Filter(filter));
+            }
+            _ => {
+                e.filter.accept(self)?;
+            }
+        }
+
+        e.object.accept(self)?;
+
+        self.chunk_mut().emit(OpCode::Call1);
+
+        Ok(())
+        //unimplemented!("visit_filter_expr({:?})", e);
     }
     fn visit_group_expr(&mut self, e: &mut GroupExpr<'a>) -> VisitorResult {
         unimplemented!("visit_group_expr({:?})", e);

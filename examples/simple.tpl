@@ -1,6 +1,7 @@
 
+
 {% template Simple(greeting string, subject string, age number) %}
-{{greeting}}, {{subject}} {{age+1}}!
+{{greeting }}, {{subject}} {{age+1}}!
 {% if age > 100 %}
 You are old
 {% elif age == 100 %}

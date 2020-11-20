@@ -1,5 +1,5 @@
 
 
 {% template SimpleFilter() %}
-{{ "Rasmus Kildevæld" | uppercase }}
+{{ "Rasmus Kildevæld" | uppercase | lowercase }}
 {% end %}

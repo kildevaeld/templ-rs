@@ -1,4 +1,4 @@
-{{greeting}}, {{subject}} {{age+1}}!
+{{greeting | capitalize}}, {{subject}} {{age+1}}!
 {% if age > 100 %}
 You are old
 {% elif age == 100 %}

@@ -311,8 +311,8 @@ peg::parser! {
             = "++" { PostfixOperator::Increment }
             / "--" { PostfixOperator::Decrement }
 
-        rule open() = "{%"
-        rule close() = "%}"
+        rule open() =  __ "{%-" / "{%"
+        rule close() = "%}" / "-%}" __
 
         rule open_close<T>(x: rule<T>) -> T
             = open() _ v:x() _ close() { v }
