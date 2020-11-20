@@ -11,3 +11,7 @@ templ-parser = { path = "../templ-parser" }
 templ-ast = { path = "../templ-ast" }
 templ-vm = { path  = "../templ-vm" }
 templ-runtime = { path = "../templ-runtime" }
+glob = { version = "0.3", optional = true }
+
+[features]
+default = [  ]

@@ -24,10 +24,10 @@ impl<'a> Visitor<'a> {
 }
 
 impl<'a> ExprVisitor<'a, VisitorResult> for Visitor<'a> {
-    fn visit_lookup_expr(&mut self, e: &mut LookupExpr<'a>) -> VisitorResult {
+    fn visit_lookup_expr(&mut self, _e: &mut LookupExpr<'a>) -> VisitorResult {
         Ok(())
     }
-    fn visit_literal_expr(&mut self, e: &mut LiteralExpr<'a>) -> VisitorResult {
+    fn visit_literal_expr(&mut self, _e: &mut LiteralExpr<'a>) -> VisitorResult {
         Ok(())
     }
     fn visit_call_expr(&mut self, e: &mut CallExpr<'a>) -> VisitorResult {
@@ -41,14 +41,14 @@ impl<'a> ExprVisitor<'a, VisitorResult> for Visitor<'a> {
     fn visit_index_expr(&mut self, e: &mut IndexExpr<'a>) -> VisitorResult {
         unimplemented!("visit_index_expr({:?})", e);
     }
-    fn visit_filter_expr(&mut self, e: &mut FilterExpr<'a>) -> VisitorResult {
+    fn visit_filter_expr(&mut self, _e: &mut FilterExpr<'a>) -> VisitorResult {
         // unimplemented!("visit_filter_expr({:?})", e);
         Ok(())
     }
     fn visit_group_expr(&mut self, e: &mut GroupExpr<'a>) -> VisitorResult {
         unimplemented!("visit_group_expr({:?})", e);
     }
-    fn visit_binary_expr(&mut self, e: &mut BinaryExpr<'a>) -> VisitorResult {
+    fn visit_binary_expr(&mut self, _e: &mut BinaryExpr<'a>) -> VisitorResult {
         Ok(())
     }
     fn visit_logical_expr(&mut self, e: &mut LogicalExpr<'a>) -> VisitorResult {
@@ -164,13 +164,13 @@ impl<'a> StmtVisitor<'a, VisitorResult> for Visitor<'a> {
         }
         Ok(())
     }
-    fn visit_param_stmt(&mut self, e: &mut ParamStmt<'a>) -> VisitorResult {
+    fn visit_param_stmt(&mut self, _e: &mut ParamStmt<'a>) -> VisitorResult {
         Ok(())
     }
-    fn visit_raw_stmt(&mut self, e: &mut RawStmt<'a>) -> VisitorResult {
+    fn visit_raw_stmt(&mut self, _e: &mut RawStmt<'a>) -> VisitorResult {
         Ok(())
     }
-    fn visit_model_stmt(&mut self, e: &mut ModelStmt<'a>) -> VisitorResult {
+    fn visit_model_stmt(&mut self, _e: &mut ModelStmt<'a>) -> VisitorResult {
         Ok(())
     }
     fn visit_expr_stmt(&mut self, e: &mut ExprStmt<'a>) -> VisitorResult {
@@ -182,7 +182,7 @@ impl<'a> StmtVisitor<'a, VisitorResult> for Visitor<'a> {
     fn visit_comment_stmt(&mut self, e: &mut CommentStmt<'a>) -> VisitorResult {
         unimplemented!("visit_comment_stmt({:?})", e);
     }
-    fn visit_tag_stmt(&mut self, e: &mut TagStmt<'a>) -> VisitorResult {
+    fn visit_tag_stmt(&mut self, _e: &mut TagStmt<'a>) -> VisitorResult {
         Ok(())
         //unimplemented!("visit_tag_stmt({:?})", e);
     }
